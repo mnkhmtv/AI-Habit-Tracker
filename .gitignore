@@ -7,3 +7,5 @@ backend/firebase-adminsdk.json
 # ML
 datasets/*.csv
 notebooks/*.ipynb_checkpoints/
+data/*pkl
+data/*db
