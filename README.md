@@ -1,92 +1,120 @@
-# AI-Powered Habit Tracker
+# AI-Powered Habit Tracker (HabitTrack)
 
-An AI-powered habit tracking application built with Streamlit that recommends personalized habits and helps users maintain consistency.
+HabitTrack — приложение для отслеживания привычек с поддержкой искусственного интеллекта, созданное на Streamlit. Приложение предлагает персонализированные привычки и помогает пользователям поддерживать последовательность.
 
-## Features
+## Основные функции
 
-- **User Registration**: Collect user preferences and goals
-- **AI Habit Recommendations**: Get personalized habit suggestions based on your profile
-- **Habit Tracking**: Track your daily habits and build streaks
-- **Analytics**: View your progress with interactive charts
-- **Time Optimization**: AI suggests optimal times for habits based on your usage patterns
+- **Авторизация пользователя**: Регистрация и вход в систему
+- **Рекомендации привычек**: Получение персонализированных предложений привычек
+- **Отслеживание привычек**: Отмечайте выполненные привычки и создавайте серии
+- **Аналитика**: Просмотр прогресса с помощью интерактивных графиков
+- **Управление привычками**: Добавление, редактирование и удаление привычек
+- **Русскоязычный интерфейс**: Полностью локализованный на русский язык
 
-## Human-AI Interaction Design Principles
+## Принципы взаимодействия человека и ИИ
 
-This application implements key principles of Human-AI Interaction Design:
+Это приложение реализует ключевые принципы дизайна взаимодействия человека и ИИ:
 
-### Interpretability
-- The ML recommendation system explains why habits are recommended
-- Clear visualization of data and decision patterns
-- Transparent AI suggestions with reasoning
+### Интерпретируемость
+- Система рекомендаций объясняет, почему предлагаются те или иные привычки
+- Четкая визуализация данных и статистики
+- Прозрачные предложения с пояснениями
 
-### Usability & Accessibility
-- Intuitive UI with clear navigation
-- High contrast mode support
-- Screen reader compatibility
-- Responsive design for different devices
+### Удобство использования
+- Интуитивно понятный интерфейс с четкой навигацией
+- Быстрое добавление привычек прямо на главном экране
+- Рекомендации доступны в верхней части дашборда
+- Адаптивный дизайн для разных устройств
 
-### Ethical Considerations
-- Privacy-focused (data stored locally)
-- User control over recommendations
-- Opt-in data collection for improvements
-- No dark patterns to manipulate user behavior
+### Этические соображения
+- Ориентация на конфиденциальность (данные хранятся локально)
+- Пользовательский контроль над рекомендациями
+- Отсутствие манипулятивных паттернов поведения
 
-## Tech Stack
+## Технологический стек
 
-- **Frontend**: Streamlit
-- **Backend**: Python
-- **ML**: scikit-learn, pandas, numpy
-- **Data Visualization**: Plotly
-- **Database**: SQLite
+- **Фронтенд и бэкенд**: Streamlit, Python
+- **Машинное обучение**: scikit-learn, pandas, numpy
+- **Визуализация данных**: Plotly, Altair
+- **База данных**: SQLite
 
-## Setup and Installation
+## Установка и настройка
 
-1. Clone the repository:
+1. Клонируйте репозиторий:
    ```
-   git clone https://github.com/username/AI-Habit-Tracker.git
+   git clone https://github.com/yourusername/AI-Habit-Tracker.git
    cd AI-Habit-Tracker
    ```
 
-2. Create a virtual environment:
+2. Создайте виртуальное окружение:
    ```
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  # В Windows: venv\Scripts\activate
    ```
 
-3. Install dependencies:
+3. Установите зависимости:
    ```
    pip install -r requirements.txt
    ```
 
-4. Run the application:
+4. Запустите приложение:
    ```
-   streamlit run main.py
+   streamlit run app.py
    ```
 
-## Usage Guide
+## Руководство по использованию
 
-1. **Register/Login**: Create an account or log in
-2. **Profile Setup**: Enter your preferences and goals
-3. **Habit Selection**: Choose from AI-recommended habits or create your own
-4. **Daily Tracking**: Check off completed habits on the dashboard
-5. **Analytics**: View your progress and streaks
-6. **Optimize**: Apply AI-suggested time optimizations
+1. **Регистрация/Вход**: Создайте учетную запись или войдите в систему
+2. **Выбор привычек**: На главном экране выберите рекомендуемые привычки или создайте свои
+3. **Ежедневное отслеживание**: Отмечайте выполненные привычки на дашборде
+4. **Аналитика**: Просматривайте свой прогресс и серии выполнения
+5. **Управление**: Редактируйте или удаляйте привычки через вкладку "Управление"
 
-## Project Structure
+## Структура проекта
 
 ```
 AI-Habit-Tracker/
 ├── backend/
-│   ├── database.py      # Database operations
-│   ├── ml_engine.py     # ML recommendation engine
-│   └── utils.py         # Utility functions
+│   ├── database.py      # Операции с базой данных
+│   ├── ml_engine.py     # Движок рекомендаций ML
+│   └── utils.py         # Служебные функции
 ├── frontend/
-│   ├── auth.py          # Login/registration views
-│   ├── dashboard.py     # Habit tracking dashboard
-│   └── recommendations.py # Habit recommendation views
+│   ├── auth.py          # Представления входа/регистрации
+│   ├── dashboard.py     # Дашборд отслеживания привычек
+│   ├── profile.py       # Страница профиля пользователя
+│   ├── recommendations.py # Представления рекомендаций привычек
+│   └── tracker.py       # Дополнительные представления трекера
 ├── datasets/
-│   ├── survey_data.csv  # User profile training data
-│   └── habits_catalog.csv # Habits catalog
-├── main.py              # Main application entry point
-└── requirements.txt     # Dependencies
+│   ├── survey_data.csv   # Данные для обучения профиля пользователя
+│   └── habits_catalog.csv # Каталог привычек
+├── data/                 # Директория для хранения базы данных
+│   └── habit_tracker.db  # SQLite база данных
+├── app.py                # Точка входа в приложение
+└── requirements.txt      # Зависимости
 ```
+
+## Особенности реализации
+
+### Система рекомендаций
+
+Система рекомендаций использует машинное обучение для анализа:
+- Предпочтений пользователя (категории интересов)
+- Существующих привычек
+- Временных ограничений
+- Уровня сложности
+
+На основе этих данных предлагаются персонализированные привычки, которые с наибольшей вероятностью будут соответствовать целям пользователя.
+
+### Отслеживание прогресса
+
+Приложение отслеживает:
+- Серии выполнения (текущие и максимальные)
+- Процент выполнения по каждой привычке
+- Общую статистику использования
+
+### База данных
+
+SQLite база данных содержит следующие таблицы:
+- `users`: Информация о пользователях
+- `habits`: Сохраненные привычки
+- `habit_tracking`: Данные отслеживания выполнения
