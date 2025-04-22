@@ -64,12 +64,39 @@ def render_register():
         password = st.text_input("Пароль", type="password")
         confirm_password = st.text_input("Подтвердите пароль", type="password")
         
+        # Add age field
+        age = st.slider("Возраст", min_value=13, max_value=90, value=30)
+        
+        # Add preferences/предпочтения fields
+        st.subheader("Предпочтения")
+        activity_preferences = st.multiselect(
+            "Предпочтения активности",
+            options=["Физические", "Умственные", "Творческие", "Социальные", "Эмоциональные"],
+            default=["Физические", "Умственные"]
+        )
+        
+        improvement_areas = st.multiselect(
+            "Области для улучшения",
+            options=["Здоровье", "Продуктивность", "Обучение", "Осознанность", 
+                    "Отношения", "Карьера", "Финансы"]
+        )
+        
+        time_commitment = st.select_slider(
+            "Доступное время",
+            options=["Очень мало (5 мин)", "Мало (10 мин)", "Средне (15-20 мин)", 
+                    "Много (30+ мин)"]
+        )
+        
+        barriers = st.text_area(
+            "Что мешало вам формировать привычки в прошлом?"
+        )
+        
         submitted = st.form_submit_button("Зарегистрироваться")
         
         if submitted:
             # Validate inputs
             if not username or not email or not password or not confirm_password:
-                st.error("Пожалуйста, заполните все поля")
+                st.error("Пожалуйста, заполните все обязательные поля")
                 return
             
             # Validate username (alphanumeric, 3-20 chars)
@@ -98,8 +125,16 @@ def render_register():
                 st.error("Это имя пользователя уже занято")
                 return
             
+            # Convert preferences to string for storage
+            preferences = {
+                "activity_preferences": activity_preferences,
+                "improvement_areas": improvement_areas,
+                "time_commitment": time_commitment,
+                "barriers": barriers
+            }
+            
             # Create user
-            user_id = create_user(username, email, password)
+            user_id = create_user(username, email, password, age, str(preferences))
             
             if user_id:
                 # Set session state for authenticated user

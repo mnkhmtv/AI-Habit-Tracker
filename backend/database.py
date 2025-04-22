@@ -5,6 +5,7 @@ from datetime import datetime
 import hashlib
 import uuid
 import bcrypt
+import json
 
 def initialize_database():
     """Initialize the database connection and create tables if they don't exist."""
@@ -60,7 +61,7 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-def create_user(username, email, password):
+def create_user(username, email, password, age=None, preferences=None):
     """Create a new user in the database with hashed password."""
     conn = sqlite3.connect('data/habit_tracker.db')
     cursor = conn.cursor()
@@ -74,11 +75,33 @@ def create_user(username, email, password):
     # Current timestamp for registration date
     registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
+    # Parse preferences if available
+    preferences_dict = {}
+    if preferences:
+        try:
+            if isinstance(preferences, str):
+                # Remove any weird formatting
+                preferences = preferences.replace("'", '"')
+                preferences_dict = json.loads(preferences)
+            elif isinstance(preferences, dict):
+                preferences_dict = preferences
+        except:
+            # If there's an error parsing preferences, use empty dict
+            preferences_dict = {}
+    
+    # Extract values from preferences or use defaults
+    activity_preferences = json.dumps(preferences_dict.get('activity_preferences', []))
+    improvement_areas = json.dumps(preferences_dict.get('improvement_areas', []))
+    time_commitment = preferences_dict.get('time_commitment', 'Средне (15-20 мин)')
+    barriers = preferences_dict.get('barriers', '')
+    
     try:
         cursor.execute('''
-        INSERT INTO users (user_id, name, age, gender, registration_date)
-        VALUES (?, ?, ?, ?, ?)
-        ''', (user_id, username, email, password_hash, registration_date))
+        INSERT INTO users (user_id, name, age, gender, existing_habits, improvement_areas, 
+                         time_commitment, preferred_time, barriers, registration_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (user_id, username, str(age), password_hash, activity_preferences, 
+              improvement_areas, time_commitment, '', barriers, registration_date))
         
         conn.commit()
         return user_id
@@ -114,7 +137,14 @@ def get_user_by_username(username):
             'username': user_dict['name'],
             'email': '',  # Not in original schema
             'password_hash': user_dict.get('gender', ''),  # Storing password in gender field for demo
-            'created_at': int(datetime.now().timestamp())  # Use current time as placeholder
+            'created_at': int(datetime.now().timestamp()),  # Use current time as placeholder
+            
+            # Add new fields
+            'age': user_dict.get('age', ''),
+            'activity_preferences': user_dict.get('existing_habits', '[]'),
+            'improvement_areas': user_dict.get('improvement_areas', '[]'),
+            'time_commitment': user_dict.get('time_commitment', ''),
+            'barriers': user_dict.get('barriers', '')
         }
         
         return result
@@ -142,12 +172,20 @@ def get_user_by_id(user_id):
         result = {
             'id': user_dict['user_id'],
             'username': user_dict['name'],
-            'email': user_dict.get('age', ''),  # Using age field for email
+            'email': user_dict.get('age', ''),  # Using age field for email (this is confusing but keeping for compatibility)
             'password_hash': user_dict.get('gender', ''),  # Using gender field for password hash
             'full_name': user_dict.get('name', ''),  # Reusing name as full_name
             'bio': '',  # Not in original schema
             'notification_settings': user_dict.get('improvement_areas', '{}'),  # Using improvement_areas for settings
-            'created_at': int(datetime.now().timestamp())  # Use current time as placeholder
+            'created_at': int(datetime.now().timestamp()),  # Use current time as placeholder
+            
+            # Add new fields
+            'age': user_dict.get('age', ''),
+            'activity_preferences': user_dict.get('existing_habits', '[]'),
+            'improvement_areas': user_dict.get('improvement_areas', '[]'),
+            'time_commitment': user_dict.get('time_commitment', ''),
+            'preferred_time': user_dict.get('preferred_time', ''),
+            'barriers': user_dict.get('barriers', '')
         }
         
         return result
