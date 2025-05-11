@@ -175,29 +175,43 @@ def render_user_settings(user_data, user_id):
     
     st.write("#### Уведомления")
     
+    # Initialize default settings
+    default_settings = {
+        'daily_reminder': True,
+        'reminder_time': '20:00',
+        'weekly_summary': True,
+        'achievement_notifications': True
+    }
+    
     # Parse notification settings from JSON string or use default
+    notification_settings = default_settings.copy()
+    
     try:
-        if user_data.get('notification_settings') and isinstance(user_data['notification_settings'], str):
-            notification_settings = json.loads(user_data['notification_settings'])
-        else:
-            notification_settings = {}
+        if user_data.get('notification_settings'):
+            if isinstance(user_data['notification_settings'], str):
+                # Try to parse JSON string
+                parsed_settings = json.loads(user_data['notification_settings'])
+                if isinstance(parsed_settings, dict):
+                    notification_settings.update(parsed_settings)
+            elif isinstance(user_data['notification_settings'], dict):
+                # If it's already a dictionary, use it
+                notification_settings.update(user_data['notification_settings'])
+            # If it's a list or any other type, we'll use the default settings
     except:
-        notification_settings = {}
+        # If any error occurs, we'll use the default settings
+        pass
     
     with st.form("notification_settings"):
         daily_reminder = st.toggle(
             "Ежедневные напоминания о привычках",
-            value=notification_settings.get('daily_reminder', True)
+            value=notification_settings['daily_reminder']
         )
         
         # Parse reminder time or use default
         default_time = datetime.strptime('20:00', '%H:%M').time()
-        if 'reminder_time' in notification_settings:
-            try:
-                reminder_time = datetime.strptime(notification_settings['reminder_time'], '%H:%M').time()
-            except:
-                reminder_time = default_time
-        else:
+        try:
+            reminder_time = datetime.strptime(notification_settings['reminder_time'], '%H:%M').time()
+        except:
             reminder_time = default_time
             
         reminder_time = st.time_input(
@@ -207,12 +221,12 @@ def render_user_settings(user_data, user_id):
         
         weekly_summary = st.toggle(
             "Еженедельная сводка прогресса",
-            value=notification_settings.get('weekly_summary', True)
+            value=notification_settings['weekly_summary']
         )
         
         achievement_notifications = st.toggle(
             "Уведомления о достижениях",
-            value=notification_settings.get('achievement_notifications', True)
+            value=notification_settings['achievement_notifications']
         )
         
         submitted = st.form_submit_button("Сохранить настройки")

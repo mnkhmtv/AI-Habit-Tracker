@@ -1,11 +1,6 @@
 # Python (backend)
 __pycache__/
 venv/
-backend/firebase-adminsdk.json
 *.pyc
 
 # ML
-datasets/*.csv
-notebooks/*.ipynb_checkpoints/
-data/*.pkl
-data/*.db
