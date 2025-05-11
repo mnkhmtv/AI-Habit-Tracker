@@ -1,17 +1,6 @@
-# Node.js (frontend)
-node_modules/
-dist/
-
 # Python (backend)
 __pycache__/
 venv/
 *.pyc
 
 # ML
-datasets/*.csv
-notebooks/*.ipynb_checkpoints/
-
-# IDE
-.vscode/
-.idea/
-.DS_Store
